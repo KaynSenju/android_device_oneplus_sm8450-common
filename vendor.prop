@@ -95,6 +95,7 @@ vendor.qc2audio.per_frame.flac.dec.enabled=true
 
 # Chipset
 ro.soc.manufacturer=QTI
+ro.soc.model=SM8450
 
 # Dex
 dalvik.vm.boot-dex2oat-cpu-set=1,2,3,4,5,6,7
