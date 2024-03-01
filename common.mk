@@ -132,10 +132,13 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.frameworks.cameraservice.service@2.2.vendor \
     android.frameworks.sensorservice@1.0.vendor \
+    android.frameworks.stats-V1-ndk_platform.vendor \
     android.hardware.camera.provider@2.7.vendor \
     android.hardware.graphics.common-V2-ndk.vendor \
     android.hardware.graphics.common-V2-ndk_platform.vendor \
+    camera.device@1.0-impl \
     vendor.qti.hardware.camera.aon@1.0.vendor \
+    vendor.qti.hardware.camera.device@1.0.vendor \
     vendor.qti.hardware.camera.postproc@1.0.vendor
 
 PRODUCT_COPY_FILES += \
@@ -196,6 +199,7 @@ PRODUCT_PACKAGES += \
     android.hardware.common-V2-ndk_platform.vendor
 
 USE_OPENGL_RENDERER := true
+
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
@@ -330,7 +334,7 @@ PRODUCT_COPY_FILES += \
     $(AUDIO_HAL_DIR)/configs/common/codec2/service/1.0/c2audio.vendor.base-arm64.policy:vendor/etc/seccomp_policy/c2audio.vendor.base-arm64.policy \
     $(AUDIO_HAL_DIR)/configs/common/codec2/service/1.0/c2audio.vendor.ext-arm.policy:vendor/etc/seccomp_policy/c2audio.vendor.ext-arm.policy \
     $(AUDIO_HAL_DIR)/configs/common/codec2/service/1.0/c2audio.vendor.ext-arm64.policy:vendor/etc/seccomp_policy/c2audio.vendor.ext-arm64.policy
-   
+
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_c2.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_c2.xml \
