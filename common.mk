@@ -147,6 +147,9 @@ PRODUCT_COPY_FILES += \
 # Oneplus Camera
 $(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
 
+# Google Camera
+$(call inherit-product-if-exists, vendor/GoogleCamera/config.mk) 
+
 # Dalvik
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
