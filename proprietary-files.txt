@@ -1,7 +1,6 @@
 ## All proprietary files from this list, unless pinned and noted otherwise, are
 ## from OnePlus 10 Pro 5G (NE2213_14.0.0.402(EX01)).
 
-
 # ACDBs
 vendor/etc/acdbdata/nn_ns_models/fai__2.0.0_0.1__3.0.0_0.0__eai_1.36_enpu2.pmd
 vendor/etc/acdbdata/nn_ns_models/fai__2.3.0_0.1__3.0.0_0.0__eai_1.10.pmd
@@ -15,6 +14,7 @@ vendor/etc/acdbdata/waipio_mtp/MTP_workspaceFileXml.qwsp
 # ADSP
 vendor/bin/adsprpcd
 vendor/etc/init/vendor.qti.adsprpc-guestos-service.rc
+vendor/etc/init/vendor.qti.audio-adsprpc-service.rc
 vendor/lib64/libadsp_default_listener.so
 vendor/lib64/libadsprpc.so
 vendor/lib64/libloadalgo_stub.so
@@ -459,31 +459,6 @@ vendor/lib64/vendor.display.color@1.6.so
 vendor/lib64/vendor.display.color@1.7.so
 vendor/lib64/vendor.display.postproc@1.0.so
 
-# Dolby
-odm/bin/hw/vendor.dolby_v3_6.hardware.dms360@2.0-service
-odm/etc/dolby/multimedia_dolby_dax_default.xml
-odm/etc/init/vendor.dolby_v3_6.hardware.dms360@2.0-service.rc
-odm/etc/vintf/manifest/manifest_dax_dolby_v3_6.xml
-odm/etc/audio_effects.xml
-odm/lib/libstagefright_soft_ddpdec_v3_6.so:odm/lib/libstagefright_soft_ddpdec.so
-odm/lib/soundfx/libhwdap_v3_6.so
-odm/lib/soundfx/libswdap_v3_6.so
-odm/lib/libdapparamstorage_v3_6.so
-odm/lib/libdeccfg_v3_6.so
-odm/lib/libdlbdsservice_v3_6.so
-odm/lib/libqtigef.so
-odm/lib/libstagefrightdolby.so
-odm/lib/vendor.dolby_v3_6.hardware.dms360@2.0-impl.so
-odm/lib/vendor.dolby_v3_6.hardware.dms360@2.0.so
-odm/lib64/soundfx/libhwdap_v3_6.so
-odm/lib64/soundfx/libswdap_v3_6.so
-odm/lib64/libdapparamstorage_v3_6.so
-odm/lib64/libdeccfg_v3_6.so
-odm/lib64/libdlbdsservice_v3_6.so
-odm/lib64/libqtigef.so
-odm/lib64/vendor.dolby_v3_6.hardware.dms360@2.0-impl.so
-odm/lib64/vendor.dolby_v3_6.hardware.dms360@2.0.so
-
 # DPM
 system_ext/bin/dpmd
 system_ext/bin/tcmd
@@ -870,9 +845,11 @@ vendor/etc/msm_irqbalance.conf
 
 # Kernel
 vendor/bin/init.kernel.post_boot-cape.sh
+vendor/bin/init.kernel.post_boot-taro.sh
 vendor/bin/init.kernel.post_boot.sh
 vendor/bin/init.qti.kernel.sh
 vendor/bin/vendor_modprobe.sh
+vendor/etc/init/hw/init.qti.kernel.rc
 
 # Keymaster
 vendor/bin/hw/android.hardware.keymaster@4.1-service-qti
