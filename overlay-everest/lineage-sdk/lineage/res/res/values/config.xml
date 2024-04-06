@@ -44,6 +44,7 @@
     <!-- Defines the actions shown in advanced reboot submenu -->
     <string-array name="config_restartActionsList">
         <item>restart</item>
+        <item>restart_systemui</item>        
         <item>restart_recovery</item>
         <item>restart_bootloader</item>
         <item>restart_fastboot</item>
@@ -55,4 +56,14 @@
         <item>org.thunderdog.challegram</item>
         <item>us.zoom.videomeetings</item>
     </string-array>
+
+    <!-- The list of package IDs that are allowed to skip camera high frame rate checks. -->
+    <string-array name="config_cameraHFRPrivAppList" translatable="false">
+        <item>com.oplus.camera</item>
+        <item>org.codeaurora.snapcam</item>
+        <item>org.lineageos.aperture</item>
+    </string-array>
+
+    <!-- Default values for LiveDisplay -->
+    <bool name="config_enableLiveDisplay">false</bool>
 </resources>
