@@ -32,9 +32,6 @@ import /vendor/etc/init/hw/init.target.rc
 import /vendor/etc/init/hw/init.qcom.factory.rc
 
 on early-init
-    mount tracefs tracefs /sys/kernel/tracing
-    chmod 0755 /sys/kernel/tracing
-
   # create symlink for vendor mount points
     symlink /vendor/firmware_mnt /firmware
     symlink /vendor/bt_firmware /bt_firmware
@@ -69,6 +66,16 @@ on init
     chmod 0660 /sys/fs/cgroup/memory/bg/tasks
 
 on post-fs
+    # Hyper Touch
+    chown system system /proc/touchpanel/game_switch_enable
+
+    # TP Edge Touch Limit
+    chown system system /proc/touchpanel/oplus_tp_direction
+    write /proc/touchpanel/oplus_tp_direction 0
+
+    # USB 2.0 Force Fast Charge
+    chown system system /sys/module/oplus_chg/parameters/force_fast_charge
+    chown system system /sys/module/oplus_chg/parameters/ffc_val
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -133,7 +140,6 @@ on boot
     mkdir /persist/misc 0770 system system
     mkdir /persist/alarm 0770 system system
     mkdir /mnt/vendor/persist/time 0770 system system
-    mkdir /mnt/vendor/persist/secnvm 0770 system system
     mkdir /mnt/vendor/persist/iar_db 0770 system system
     mkdir /mnt/vendor/spunvm 0770 system system
 
@@ -346,22 +352,9 @@ on post-fs-data
     chown radio radio /data/vendor/radio/db_check_done
     chmod 0660 /data/vendor/radio/db_check_done
 
-    # qti-logkit data
-    mkdir /data/vendor/qti-logkit/ 0771 system system
-    mkdir /data/vendor/qti-logkit/shared-privileged/ 2770 system system
-    mkdir /data/vendor/qti-logkit/shared-public/ 2770 system diag
-    mkdir /data/vendor/qti-logkit/socket-privileged/ 2770 system system
-    mkdir /data/vendor/qti-logkit/socket-public/ 2750 system diag
-    mkdir /data/vendor/qti-logkit/logdata/ 2750 system shell
-
     #Create SWAP related dirs
     mkdir /data/vendor/swap 0770 root system
     chmod 2770 /data/vendor/swap
-
-    # set aggressive read ahead for dm-0 and dm-1 during boot up
-    write /sys/block/dm-0/queue/read_ahead_kb 2048
-    write /sys/block/dm-1/queue/read_ahead_kb 2048
-    write /sys/block/dm-2/queue/read_ahead_kb 2048
 
     # Create vpp directory
     mkdir /data/vendor/vpp 0770 media media
@@ -444,9 +437,6 @@ on property:sys.boot_completed=1
     write /sys/bus/platform/devices/1d84000.ufshc/auto_hibern8 5000
     #Enable UFS clock gating back
     write /sys/bus/platform/devices/1d84000.ufshc/clkgate_enable 1
-    #Reset read ahead for dm-0 and dm-1 to 512kb
-    write /sys/block/dm-0/queue/read_ahead_kb 512
-    write /sys/block/dm-1/queue/read_ahead_kb 512
     #WDSP FW boot sysfs node used by STHAL
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
@@ -460,6 +450,9 @@ on property:persist.vendor.radio.atfwd.start=false
 
 on property:vendor.radio.atfwd.start=false
     stop vendor.atfwd
+
+# Enable suspend to RAM
+    write /sys/power/mem_sleep "deep"
 
 # corefile limit
 on property:persist.debug.trace=1

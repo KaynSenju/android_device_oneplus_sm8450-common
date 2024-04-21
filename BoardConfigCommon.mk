@@ -33,11 +33,11 @@ BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Architecture
 TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a-branchprot
+TARGET_ARCH_VARIANT := armv9-a
 TARGET_CPU_ABI := arm64-v8a
 TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := kryo300
+TARGET_CPU_VARIANT_RUNTIME := cortex-a510
 
 TARGET_2ND_ARCH := arm
 TARGET_2ND_ARCH_VARIANT := armv8-2a
@@ -67,6 +67,9 @@ TARGET_BOOTLOADER_BOARD_NAME := taro
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(COMMON_PATH)/bluetooth/include
 
+# Camera
+TARGET_CAMERA_OVERRIDE_FORMAT_FROM_RESERVED := true
+
 # Display
 TARGET_GRALLOC_HANDLE_HAS_RESERVED_SIZE := true
 
@@ -86,11 +89,14 @@ TARGET_SURFACEFLINGER_UDFPS_LIB := //hardware/oplus:libudfps_extension.oplus
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := \
     $(COMMON_PATH)/device_framework_matrix.xml \
     hardware/qcom-caf/common/vendor_framework_compatibility_matrix.xml \
-    vendor/lineage/config/device_framework_matrix.xml
+    vendor/aosp/config/device_framework_matrix.xml
 DEVICE_FRAMEWORK_MANIFEST_FILE += $(COMMON_PATH)/framework_manifest.xml
 DEVICE_MATRIX_FILE := hardware/qcom-caf/common/compatibility_matrix.xml
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
 ODM_MANIFEST_FILES := $(COMMON_PATH)/manifest_odm.xml
+
+# HWUI
+HWUI_COMPILE_FOR_PERF := true
 
 # Init
 TARGET_INIT_VENDOR_LIB := //$(COMMON_PATH):libinit_oplus
@@ -104,13 +110,13 @@ BOARD_BOOTCONFIG:= \
 BOARD_KERNEL_BASE := 0x00000000
 BOARD_KERNEL_IMAGE_NAME := Image
 BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_SEPARATED_DTBO := true
+# For realme GT2 pro only!!!
+# BOARD_KERNEL_SEPARATED_DTBO := true
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 BOARD_RAMDISK_USE_LZ4 := true
 BOARD_USES_GENERIC_KERNEL_IMAGE := true
 BOARD_USES_QCOM_MERGE_DTBS_SCRIPT := true
 TARGET_KERNEL_SOURCE := kernel/oneplus/sm8450
-TARGET_KERNEL_CLANG_VERSION := r450784e
 TARGET_KERNEL_CONFIG := gki_defconfig vendor/waipio_GKI.config vendor/oplus_GKI.config
 
 # Kernel modules
@@ -151,7 +157,7 @@ BOARD_USES_METADATA_PARTITION := true
 
 # Partitions
 BOARD_PRODUCTIMAGE_MINIMAL_PARTITION_RESERVED_SIZE := false
--include vendor/lineage/config/BoardConfigReservedSize.mk
+-include vendor/aosp/config/BoardConfigReservedSize.mk
 BOARD_BOOTIMAGE_PARTITION_SIZE := 201326592
 BOARD_DTBOIMG_PARTITION_SIZE := 25165824
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 104857600
@@ -195,6 +201,9 @@ VENDOR_SECURITY_PATCH := $(BOOT_SECURITY_PATCH)
 # SEPolicy
 include device/qcom/sepolicy_vndr/SEPolicy.mk
 include hardware/oplus/sepolicy/qti/SEPolicy.mk
+
+# SurfaceFlinger
+TARGET_USE_AOSP_SURFACEFLINGER := true
 
 # Verified Boot
 BOARD_AVB_ENABLE := true
@@ -244,6 +253,7 @@ CONFIG_IEEE80211AX := true
 WIFI_DRIVER_STATE_CTRL_PARAM := "/dev/wlan"
 WIFI_DRIVER_STATE_OFF := "OFF"
 WIFI_DRIVER_STATE_ON := "ON"
+WIFI_FEATURE_HOSTAPD_11AX := true
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 WIFI_HIDL_UNIFIED_SUPPLICANT_SERVICE_RC_ENTRY := true
 WPA_SUPPLICANT_VERSION := VER_0_8_X

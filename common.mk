@@ -29,6 +29,11 @@ PRODUCT_PACKAGES += \
     AntHalService-Soong \
     com.dsi.ant@1.0.vendor
 
+# Alert slider
+PRODUCT_PACKAGES += \
+    DeviceSettings \
+    tri-state-key-calibrate
+
 # Audio
 SOONG_CONFIG_NAMESPACES += android_hardware_audio
 SOONG_CONFIG_android_hardware_audio += \
@@ -67,19 +72,25 @@ PRODUCT_PACKAGES += \
 AUDIO_HAL_DIR := hardware/qcom-caf/sm8450/audio/primary-hal
 QCV_FAMILY_SKUS := cape taro ukee
 
-PRODUCT_COPY_FILES += \
-    $(AUDIO_HAL_DIR)/configs/common/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(AUDIO_HAL_DIR)/configs/taro/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(AUDIO_HAL_DIR)/configs/taro/card-defs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/card-defs.xml \
-    $(AUDIO_HAL_DIR)/configs/taro/microphone_characteristics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/microphone_characteristics.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml \
-    $(LOCAL_PATH)/audio/audio_policy_configuration_a2dp_offload_disabled.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_a2dp_offload_disabled.xml \
-    $(LOCAL_PATH)/audio/bluetooth_hearing_aid_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_hearing_aid_audio_policy_configuration.xml
+# Dolby Manager
+PRODUCT_PACKAGES += \
+    DolbyManager
+
+TARGET_EXCLUDES_AUDIOFX := true
 
 PRODUCT_COPY_FILES += \
-    frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    $(AUDIO_HAL_DIR)/configs/common/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(AUDIO_HAL_DIR)/configs/taro/card-defs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/card-defs.xml \
+    $(AUDIO_HAL_DIR)/configs/taro/microphone_characteristics.xml:$(TARGET_COPY_OUT_VENDOR)/etc/microphone_characteristics.xml \
+    $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+    $(LOCAL_PATH)/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio/audio_policy_configuration.xml \
+    $(LOCAL_PATH)/audio/audio_policy_configuration_a2dp_offload_disabled.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_a2dp_offload_disabled.xml \
+    $(LOCAL_PATH)/audio/bluetooth_hearing_aid_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_hearing_aid_audio_policy_configuration.xml \
+    $(LOCAL_PATH)/audio/audio_policy_volumes.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_volumes.xml \
+    $(LOCAL_PATH)/audio/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml
+
+PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/bluetooth_audio_policy_configuration_7_0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_audio_policy_configuration_7_0.xml \
-    frameworks/av/services/audiopolicy/config/default_volume_tables.xml:$(TARGET_COPY_OUT_VENDOR)/etc/default_volume_tables.xml \
     frameworks/av/services/audiopolicy/config/r_submix_audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/r_submix_audio_policy_configuration.xml \
     frameworks/native/data/etc/android.hardware.audio.low_latency.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.low_latency.xml \
     frameworks/native/data/etc/android.hardware.audio.pro.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.pro.xml \
@@ -106,6 +117,9 @@ PRODUCT_PACKAGES += \
     android.hardware.boot@1.2-impl-qti.recovery \
     android.hardware.boot@1.2-service
 
+# Blur
+TARGET_ENABLE_BLUR := true
+
 # Camera
 PRODUCT_PACKAGES += \
     android.frameworks.cameraservice.service@2.2.vendor \
@@ -126,11 +140,31 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.camera.full.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.full.xml \
     frameworks/native/data/etc/android.hardware.camera.raw.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.raw.xml
 
+# Oneplus Camera
+$(call inherit-product-if-exists, vendor/oplus/camera/opluscamera.mk)
+
+# Inherit Google Camera
+$(call inherit-product-if-exists, vendor/GoogleCamera/config.mk)
+
 # Dalvik
 $(call inherit-product, frameworks/native/build/phone-xhdpi-6144-dalvik-heap.mk)
 
 # DebugFS
 PRODUCT_SET_DEBUGFS_RESTRICTIONS := true
+
+# Dex
+PRODUCT_DEXPREOPT_SPEED_APPS += \
+    Launcher3QuickStep \
+    Settings \
+    SettingsGoogle \
+    SystemUI \
+    SystemUIGoogle
+
+PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := everything
+
+PRODUCT_SYSTEM_PROPERTIES += \
+    dalvik.vm.dex2oat-filter=everything \
+    dalvik.vm.image-dex2oat-filter=everything
 
 # Display
 PRODUCT_PACKAGES += \
@@ -145,7 +179,6 @@ PRODUCT_PACKAGES += \
     libqdMetaData.system \
     libsdmcore \
     libsdmutils \
-    libtinyxml \
     vendor.display.config@1.0 \
     vendor.display.config@1.15.vendor \
     vendor.display.config@2.0 \
@@ -159,12 +192,10 @@ PRODUCT_PACKAGES += \
     vendor.qti.hardware.display.mapper@4.0.vendor \
     android.hardware.common-V2-ndk_platform.vendor
 
+USE_OPENGL_RENDERER := true
+
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.touchscreen.multitouch.jazzhand.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.touchscreen.multitouch.jazzhand.xml
-
-# Doze
-PRODUCT_PACKAGES += \
-    OplusDoze
 
 # DRM
 PRODUCT_PACKAGES += \
@@ -187,6 +218,12 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
+
+TARGET_HAS_UDFPS := true
+
+# Freeform Multiwindow
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.software.freeform_window_management.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.freeform_window_management.xml
 
 # Gatekeeper
 PRODUCT_PACKAGES += \
@@ -220,8 +257,8 @@ PRODUCT_COPY_FILES += \
 
 # Health
 PRODUCT_PACKAGES += \
-    android.hardware.health@2.1.vendor \
-    android.hardware.health-service.qti
+    android.hardware.health@2.1-impl-qti \
+    android.hardware.health@2.1-service
 
 # HIDL
 PRODUCT_PACKAGES += \
@@ -242,6 +279,8 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     fstab.qcom.vendor_ramdisk \
     init.class_main.sh \
+    init.kernel.post_boot.sh \
+    init.kernel.post_boot-taro.sh \
     init.oplus.hw.rc \
     init.oplus.hw.rc.recovery \
     init.oplus.rc \
@@ -251,6 +290,7 @@ PRODUCT_PACKAGES += \
     init.qcom.sh \
     init.qcom.usb.rc \
     init.qcom.usb.sh \
+    init.qti.kernel.rc \
     init.target.rc \
     ueventd.oplus.rc \
     ueventd.qcom.rc
@@ -265,18 +305,14 @@ PRODUCT_PACKAGES += \
     android.hardware.security.keymint-V1-ndk_platform.vendor \
     android.hardware.security.rkp-V3-ndk.vendor \
     android.hardware.security.secureclock-V1-ndk_platform.vendor \
-    android.hardware.security.sharedsecret-V1-ndk_platform.vendor \
+    android.hardware.security.sharedsecret-V1-ndk_platform.vendor
 
 PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml
+    frameworks/native/data/etc/android.hardware.keystore.app_attest_key.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.keystore.app_attest_key.xml 
 
 # Lineage Health
 PRODUCT_PACKAGES += \
-    vendor.lineage.health-service.default
-
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.lineage.livedisplay@2.1-service.oplus
+    vendor.lineage.health-service.default 
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -294,6 +330,10 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_video_le.xml
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/media/media_codecs_vendor_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_vendor_audio.xml \
+    $(LOCAL_PATH)/media/media_codecs_dolby_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_dolby_audio.xml
 
 PRODUCT_PACKAGES += \
     libavservices_minijail \
@@ -319,7 +359,8 @@ $(call inherit-product, hardware/oplus/overlay/generic/generic.mk)
 $(call inherit-product, hardware/oplus/overlay/qssi/qssi.mk)
 
 DEVICE_PACKAGE_OVERLAYS += \
-    $(LOCAL_PATH)/overlay-lineage
+    $(LOCAL_PATH)/overlay-lineage \
+    $(LOCAL_PATH)/overlay
 
 PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_PACKAGES += \
@@ -338,6 +379,9 @@ PRODUCT_PACKAGES += \
     android.hardware.power-service-qti \
     android.hardware.power@1.2.vendor \
     vendor.qti.hardware.perf@2.3.vendor
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/powerhint.json:$(TARGET_COPY_OUT_VENDOR)/etc/powerhint.json
 
 # Protobuf
 PRODUCT_PACKAGES += \
@@ -475,6 +519,15 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     vendor/qcom/opensource/vibrator/excluded-input-devices.xml:$(TARGET_COPY_OUT_VENDOR)/etc/excluded-input-devices.xml
+
+# ViPER4Android FX
+$(call inherit-product-if-exists, packages/apps/ViPER4AndroidFX/config.mk)
+
+# VNDK
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v30/arm/arch-arm-armv7-a-neon/shared/vndk-core/libui.so:$(TARGET_COPY_OUT_VENDOR)/lib/libui-v30.so \
+    prebuilts/vndk/v33/arm/arch-arm-armv7-a-neon/shared/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib/libstagefright_foundation-v33.so \
+    prebuilts/vndk/v33/arm64/arch-arm64-armv8-a/shared/vndk-core/libstagefright_foundation.so:$(TARGET_COPY_OUT_VENDOR)/lib64/libstagefright_foundation-v33.so
 
 # WiFi
 PRODUCT_PACKAGES += \
